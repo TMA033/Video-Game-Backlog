@@ -1,32 +1,36 @@
 # Game Tracker
 
-A full-stack web application built with **React 19**, **Vite**, **Express**, and **CSS3** that enables users to browse, search, and track video games using live data from the **Internet Game Database (IGDB) API**.
+A full-stack web application built with **React 19**, **Vite**, **Express 5**, and **CSS3** that enables users to browse, search, and inspect video games using live metadata from the **Internet Game Database (IGDB) API**.
 
 ---
 
 ## Features
 
 ### Current Features
-* **IGDB Proxy Architecture:** Express server handles Twitch OAuth2 client-credential authentication, automatic token refresh, and proxied queries to the IGDB API.
-* **Game Discovery:** Displays popular and trending titles sorted by community hype, with content filtering to exclude adult/unrated titles.
-* **Live Search:** Dynamic search bar integrated into the header querying IGDB with formatted metadata (cover art, release dates, aggregate scores).
-* **Responsive Card Grid:** Custom Flexbox/CSS Grid catalog layout featuring rating badges, platform indicators, and hover animations.
+* **IGDB Proxy Backend:** Express server manages Twitch OAuth2 client credential handshakes, automated token regeneration, and query routing to avoid browser CORS blocks and protect API secrets.
+* **Game Discovery & Live Search:** Fetches popular titles filtered by community hype and handles dynamic search queries with release date, cover art, and aggregate score parsing.
+* **Component-Based Catalog Grid:** Decoupled `GameGrid` and `GameCard` architecture featuring hover effects, responsive CSS grid scaling, and rating badges.
+* **Detailed Game Pages (`/games/:slug`):** Dynamic routing displaying storylines, summaries, publisher/developer credits, and genre tags.
+* **Interactive Media Showcase:**
+  * Embedded YouTube trailers and high-res screenshots with a synchronized thumbnail strip.
+  * Horizontal mouse-wheel thumbnail scrolling and auto-centering on the active asset.
+  * Fullscreen lightbox modal with keyboard/button arrow navigation.
+* **Live Release Countdown:** Client-side interval counter calculating days, hours, minutes, and seconds until unreleased titles launch.
 
 ### In Active Development (Roadmap)
-* [ ] LocalStorage / Database integration for user library and backlog tracking.
-* [ ] Countdown on game's which haven't been released yet but have a known release date.
-* [ ] Platform and genre filtering via the homepage filter dropdowns.
-* [ ] User authentication and multi-list sorting (Backlog, Playing, Completed).
-* [ ] User Review's 
+* [ ] LocalStorage / database persistence for user library and backlog tracking.
+* [ ] Platform and genre dropdown filtering on catalog views.
+* [ ] User authentication and multi-shelf sorting (Playing, Completed, Dropped).
+* [ ] User reviews and community ratings.
 
 ---
 
 ## Tech Stack
 
-* **Frontend:** React 19, React Router v7, HTML5, Vanilla CSS3
-* **Backend:** Node.js, Express 5, Axios, CORS, Dotenv
+* **Frontend:** React 19, React Router, HTML5, CSS3 (Flexbox & CSS Grid)
+* **Backend:** Node.js, Express, Axios, CORS, Dotenv
 * **Build Tool:** Vite 8
-* **Data Source:** [IGDB API](https://api-docs.igdb.com/) (via Twitch Developer Services)
+* **Data Source:** [IGDB API](https://api-docs.igdb.com/) (Twitch Developer Services)
 
 ---
 
@@ -35,15 +39,15 @@ A full-stack web application built with **React 19**, **Vite**, **Express**, and
 ```text
 Browser (React / Vite on :5173)
        │
-       ▼  HTTP Fetch
+       ▼  HTTP Fetch (/api/games/popular, /search, /:slug)
 Express Proxy Server (:5000)
-       │  • Handles OAuth token lifecycle
+       │  • Manages Twitch OAuth token lifecycle
        │  • Attaches Client-ID & Bearer Token
        ▼  POST (IGDB Query Language)
 Twitch / IGDB API (v4)
 ```
 
-Direct frontend browser requests to IGDB are blocked by CORS policies and expose client secrets. The included Express server (`server.js`) acts as a secure intermediary to fetch and cache the OAuth token and proxy search/catalog requests.
+Direct frontend browser requests to IGDB are blocked by CORS policies and expose client secrets. The Express server (`server.js`) acts as a secure intermediary to fetch and cache OAuth credentials while formatting game data for frontend consumption.
 
 ---
 
@@ -53,12 +57,12 @@ Direct frontend browser requests to IGDB are blocked by CORS policies and expose
 * [Node.js](https://nodejs.org/) (v18 or higher recommended)
 * A [Twitch Developer Portal](https://dev.twitch.tv/console) account with a registered application (`Client ID` and `Client Secret`)
 
-### Installation & Setup
+### Installation & Local Setup
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/TMA033/game-tracker.git
-   cd game-tracker
+   git clone https://github.com/TMA033/Video-Game-Backlog.git
+   cd Video-Game-Backlog
    ```
 
 2. **Install dependencies:**
@@ -75,15 +79,15 @@ Direct frontend browser requests to IGDB are blocked by CORS policies and expose
    ```
 
 4. **Run the Application:**
-   Open two terminals:
+   Open two terminal windows:
 
-   * **Terminal 1 (Start Backend Server):**
+   * **Terminal 1 (Backend Server):**
      ```bash
      node server.js
      ```
      *(Runs on `http://localhost:5000`)*
 
-   * **Terminal 2 (Start Frontend Dev Server):**
+   * **Terminal 2 (Frontend Dev Server):**
      ```bash
      npm run dev
      ```
@@ -97,22 +101,30 @@ Direct frontend browser requests to IGDB are blocked by CORS policies and expose
 
 ```text
 ├── public/
-│   └── game-images/           # Sample static game assets
+│   └── game-images/               # Fallback and static assets
 ├── src/
-│   ├── assets/                # Logos, SVG icons, and loading animations
+│   ├── assets/                    # Icons, logos, and UI SVG assets
 │   ├── components/
-│   │   ├── Header.jsx         # Navigation and search bar component
-│   │   └── Header.css         # Header styling
+│   │   ├── Header.jsx             # Navigation and search input
+│   │   └── Header.css
 │   ├── pages/
-│   │   ├── HomePage.jsx       # Grid view and search results container
-│   │   └── HomePage.css       # Catalog and card styles
-│   ├── App.jsx                # Router route definitions
-│   ├── main.jsx               # Root React entry point
-│   └── index.css              # Global styles and resets
-├── .env                       # Secrets (ignored by git)
+│   │   ├── home/
+│   │   │   ├── HomePage.jsx       # Discovery and catalog container
+│   │   │   ├── GameGrid.jsx       # Grid layout wrapper
+│   │   │   ├── GameCard.jsx       # Individual game card component
+│   │   │   └── HomePage.css
+│   │   └── game details page/
+│   │       ├── GameDetails.jsx    # Showcase, countdown, and metadata
+│   │       └── GameDetails.css
+│   ├── utils/
+│   │   └── slugify.js             # URL slug generation utility
+│   ├── App.jsx                    # Route hierarchy
+│   ├── main.jsx                   # React root mount
+│   └── index.css                  # Global resets and palette variables
+├── .env                           # Secret credentials (git-ignored)
 ├── .gitignore
 ├── package.json
-├── server.js                  # Express proxy server for IGDB
+├── server.js                      # Express IGDB proxy server
 ├── vite.config.js
 └── README.md
 ```
