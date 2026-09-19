@@ -1,0 +1,108 @@
+.header {
+  height: 50px;
+  max-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1a1a1a;
+  padding: 0 15px; /* Replaces individual section margins cleanly */
+}
+
+.left-section-container {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+
+.main-logo {
+  width: 40px;
+  filter: invert(1);
+  cursor: pointer;
+}
+
+
+
+.middle-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+} 
+
+.search-bar-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 700px;
+  background-color: #262626; 
+  border-radius: 9999px; 
+  padding: 8px 16px;
+
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-bar-container:hover {
+  background-color: #333333; /* Slightly lighter gray than #262626 */
+}
+
+
+.search-bar-container:focus-within {
+  background-color: #333333; 
+  box-shadow: 0 0 0 2px #0077ff
+}
+
+
+.search-icon {
+  width: 25px;
+  height: 25px;
+  filter: invert(1);
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  border-radius: 6px;
+  font-size: 16px;
+  padding-left: 15px;
+  color: white;
+}
+
+
+.right-section-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: space-between;
+
+  font-weight: bold;
+  font-size: 16px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+
+.right-section-container > div {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.right-section-container > div:hover {
+  opacity: 0.8;
+  color: #0077ff
+}
+
+
+
+.left-section-container,
+.right-section-container {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
