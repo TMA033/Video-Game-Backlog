@@ -145,7 +145,7 @@
 }
 
 
-.add-to-backlog {
+.add-to-backlog-button {
   background: #1855ff;
   border: none;
   color: #ffffff;
@@ -159,4 +159,18 @@
 
 .add-to-backlog:hover {
   background: #1856ffb2;
+}
+
+
+.in-backlog-button {
+  background: #ffffff;
+  border: none;
+  color: #1855ff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: auto;
+  cursor: default;
 }

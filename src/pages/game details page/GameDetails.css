@@ -25,6 +25,7 @@
   background: rgba(0, 0, 0, 0.25);
   padding: 1.25rem;
   border-radius: 4px;
+  align-items: start;
 }
 
 .media-gallery {
@@ -60,6 +61,7 @@
   overflow-x: auto;
   padding-bottom: 0.5rem;
   scroll-behavior: smooth;
+  margin-top: auto;
 }
 
 .thumbnail-strip::-webkit-scrollbar {
@@ -280,10 +282,45 @@
 
 
 .release-countdown-container {
-  background: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.137);
 }
 
 .release-countdown {
   display: flex;
-  gap: 12px
+  gap: 50px;
+  font-weight: bold;
+  font-size: 20px;
+  justify-content: center;
+}
+
+.days-countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+
+.add-to-backlog-button {
+  background: #1855ff;
+  border: none;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: auto;
+}
+
+.in-backlog-button {
+  background: #ffffff;
+  border: none;
+  color: #1855ff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: auto;
 }

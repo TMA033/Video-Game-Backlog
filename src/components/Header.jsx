@@ -9,6 +9,11 @@ export function Header() {
   const [searchParams] = useSearchParams();
   const searchText = searchParams.get('search');
   const [search, setSearch] = useState(searchText || '');
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
+  function toggleNotifications() {
+    setIsNotificationsOpen((prev) => !prev);
+  }
 
   function updateSearchInput(event) {
     setSearch(event.target.value);
@@ -44,9 +49,29 @@ export function Header() {
 
       <div className="right-section">
         <div className="right-section-container">
-          <div>Notifications</div>
-          <div>My Library</div>
-          <div>Profile</div>
+          <NavLink to='/events' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+            Events
+          </NavLink>
+
+          <button type="button" className={`nav-link nav-btn ${isNotificationsOpen ? 'active' : ''}`} onClick={toggleNotifications}>
+            Notifications
+          </button>
+
+          {/* Rendering the modal conditionally / style modal later */}
+
+          {isNotificationsOpen && (
+            <div className='notification-modal'>
+              <p>No new notifications</p>
+            </div>
+          )}
+
+          <NavLink to='/library' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+            My Library
+          </NavLink>
+
+          <NavLink to='/profile' className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+            Profile
+          </NavLink>
         </div>
       </div>
     </div>

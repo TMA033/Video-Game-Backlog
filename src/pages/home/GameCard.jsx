@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
 
+export function GameCard({ game, inBacklog, onToggleBacklog }) {
 
-export function GameCard({ game }) {
-
-  const handleAddToBackLog = (e) => {
+  const handleClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log(`Added ${game.title} to backlog!`);
+    // Add to backlog logic will be here
+    onToggleBacklog(game);
   }
+
 
   return (
     <Link to={`/games/${game.slug}`} className="game-card-link">
@@ -33,7 +34,9 @@ export function GameCard({ game }) {
             <p className="release-date">{game.release}</p>
           </div>
           
-          <button className="add-to-backlog" onClick={handleAddToBackLog}>Add To Backlog</button>
+          <button className={` ${inBacklog ? 'in-backlog-button' : 'add-to-backlog-button'}`} onClick={handleClick} >
+            {inBacklog ? "In Backlog" : "Add To Backlog"}
+          </button>
 
         </div>
       </div>

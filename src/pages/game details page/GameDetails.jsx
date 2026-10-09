@@ -1,19 +1,25 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
+import { useLibrary } from '../../hooks/useLibrary';
 import { Header } from '../../components/Header';
+import { ReleaseCountdown } from './ReleaseCountdown';
 import leftArrow from '../../assets/left-arrow-svgrepo-com.svg';
 import rightArrow from '../../assets/right-arrow-svgrepo-com.svg';
 import './GameDetails.css';
+
 
 export function GameDetails() {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0); // This is the index of the currently focused media
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const { isInBacklogCheck, toggleBacklog } = useLibrary();
+
+
+  const inBacklog = Boolean(game && isInBacklogCheck(game.id));
   
   const { slug } = useParams();
 
-  const [timeLeft, setTimeLeft] = useState(null);
 
   const scrollRef = useRef(null);
   const activeThumbRef = useRef(null);
@@ -33,7 +39,7 @@ export function GameDetails() {
 
         const data = await res.json();
         setGame(data);
-        console.log(data); // delete this later, its just for showing me what response i am given
+        
 
       } catch (err) {
         console.error('Failed to load game:', err);
@@ -49,6 +55,7 @@ export function GameDetails() {
   }, [slug]);
 
 
+  // useEffect for scrolling the media gallery
   useEffect(() => {
     const el = scrollRef.current;
     if(!el) return;
@@ -65,7 +72,7 @@ export function GameDetails() {
     }
   }, [game]);
 
-
+  // useEffect for shifting the view of the image gallery
   useEffect(() => {
     if (activeThumbRef.current) {
       activeThumbRef.current.scrollIntoView({
@@ -76,42 +83,6 @@ export function GameDetails() {
     }
   }, [activeMediaIndex]);
 
-
-  useEffect(() => {
-    if (!game || !game.releaseTimestamp) return;
-
-    let timer;
-
-    const calculateTimeLeft = () => {
-      const now = new Date().getTime();
-      const difference = game.releaseTimestamp - now;
-
-      if (difference > 0) {
-        setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor ((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
-        });
-      } else {
-        setTimeLeft(null); // When timer hits 0, remove it
-        if (timer) {
-          clearInterval(timer);
-        }
-      }
-    };
-
-    // Runs immediately on mount, then counts down every second
-    calculateTimeLeft();
-
-    // Prevents starting an interval if date has passed. 
-    if (game.releaseTimestamp > Date.now()) {
-      timer = setInterval(calculateTimeLeft, 1000);
-    }
-
-    // Cleanup function to prevent memory leaks
-    return () => clearInterval(timer);
-  }, [game])
 
   
   // Combine videos and screenshot into a single list
@@ -142,33 +113,8 @@ export function GameDetails() {
       <Header />
 
       <div className="game-details-page">
-        {game.releaseTimestamp > new Date().getTime() 
-        ?
-          <div className="release-countdown-container">
-            <div className='release-countdown'>
-              <div className='days-countdown'>
-                <p>{10}</p>
-                <p>DAYS</p>
-              </div>
-
-              <div className='days-countdown'>
-                <p>{5}</p>
-                <p>HOURS</p>
-              </div>
-
-              <div className='days-countdown'>
-                <p>{40}</p>
-                <p>MINUTES</p>
-              </div>
-
-              <div className='days-countdown'>
-                <p>{30}</p>
-                <p>SECONDS</p>
-              </div>
-            </div>
-          </div>
-        : null
-        }
+        
+        <ReleaseCountdown timestamp={game.releaseTimestamp}/>
 
         <header>
           <h1 className="game-title">{game.name}</h1>
@@ -274,6 +220,10 @@ export function GameDetails() {
                 </div>
               )}
             </div>
+
+            <button className={inBacklog ? 'in-backlog-button' : 'add-to-backlog-button'} onClick={() => toggleBacklog(game)}>
+              {inBacklog ? 'Remove From Backlog' : 'Add To Backlog'}
+            </button>
           </div>
         </div>
       </div>
