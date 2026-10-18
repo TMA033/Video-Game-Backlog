@@ -174,3 +174,28 @@
   color: #fa1515;
   border-color: rgba(250, 21, 21, 0.4);
 }
+
+
+.column-top {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.clear-all-btn {
+  background: transparent;
+  color: #888888;
+  padding: 4px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #333333;
+
+  cursor: pointer;
+}
+
+
+.clear-all-btn:hover {
+  background: rgba(250, 21, 21, 0.15);
+  color: #fa1515;
+  border-color: rgba(250, 21, 21, 0.4);
+}

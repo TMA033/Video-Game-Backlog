@@ -12,7 +12,12 @@ export function BacklogColumn({
   onDragStart,
   onDragEnd,
   onRemove,
+  onClearAll
 }) {
+
+
+
+
   return (
     <div
       className={`backlog-column ${isActiveDropZone ? "drop-active" : ""}`}
@@ -20,9 +25,13 @@ export function BacklogColumn({
       onDragLeave={onDragLeave}
       onDrop={(e) => onDrop(e, statusKey)}
     >
-      <h2>
-        {label} ({games.length})
-      </h2>
+      <div className='column-top'>
+        <h2>
+          {label} ({games.length})
+        </h2>
+
+        <button className="clear-all-btn" onClick={() => onClearAll(statusKey)}>CLEAR ALL</button>
+      </div>
 
       <div className="card-list">
         {games.length === 0 ? (

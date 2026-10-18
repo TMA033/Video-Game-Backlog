@@ -70,6 +70,15 @@ export function Library() {
     setLibrary((prevLibrary) => prevLibrary.filter((game) => game.id !== gameId));
   };
 
+  const handleClearShelf = (statusKey) => {
+    setLibrary((prevLibrary) => {
+      prevLibrary.filter((game) => {
+        const gameStatus = game.status || "Not Started";
+        return gameStatus !== statusKey;
+      })
+    })
+  }
+
   return (
     <>
       <Header />
@@ -102,6 +111,7 @@ export function Library() {
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
                 onRemove={handleRemoveGame}
+                onClearAll={handleClearShelf}
               />
             );
           })}
