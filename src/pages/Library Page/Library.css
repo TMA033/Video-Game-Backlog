@@ -1,0 +1,176 @@
+.main-content {
+  flex: 1;
+  padding: 18px 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.content-header {
+  margin-bottom: 16px;
+}
+
+.content-header h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.backlog-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+
+.backlog-column {
+  background: #181818;
+  border-radius: 10px;
+  padding: 12px 18px;
+  border: 1.5px dashed #2e2e2e;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.backlog-column h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e5e5e5;
+  margin-bottom: 10px;
+}
+
+/* Visual state when dragging over a shelf */
+.backlog-column.drop-active {
+  border-color: #1855ff;
+  border-style: solid;
+  background-color: rgba(24, 85, 255, 0.08);
+  box-shadow: 0 0 14px rgba(24, 85, 255, 0.2);
+}
+
+/* Horizontal scrollable track */
+.card-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  align-items: center;
+  min-height: 195px;
+  padding-bottom: 6px;
+  scroll-behavior: smooth;
+}
+
+/* Subtle Scrollbar */
+.card-list::-webkit-scrollbar {
+  height: 5px;
+}
+
+.card-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+
+.card-list::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 4px;
+}
+
+.card-list::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+.empty-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555555;
+  font-size: 13px;
+  border: 1px dashed #2a2a2a;
+  border-radius: 6px;
+  width: 100%;
+  height: 95px;
+  flex-shrink: 0;
+}
+
+
+
+.game-card-mini {
+  width: 120px;
+  flex-shrink: 0;
+  background: #202020;
+  border-radius: 7px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: grab;
+  user-select: none;
+  border: 1px solid #2a2a2a;
+  transition: transform 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.game-card-mini:hover {
+  transform: translateY(-2px);
+  border-color: #444444;
+}
+
+.game-card-mini:active {
+  cursor: grabbing;
+}
+
+.game-card-mini.is-dragging {
+  opacity: 0.35;
+  border: 1px dashed #1855ff;
+}
+
+
+.card-mini-thumb {
+  width: 100%;
+  height: 155px;
+  background-color: #121212;
+  overflow: hidden;
+}
+
+.card-mini-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Details and Button */
+.card-mini-info {
+  padding: 8px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.card-mini-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-mini-remove {
+  background: transparent;
+  color: #888888;
+  border: 1px solid #333333;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.btn-mini-remove:hover {
+  background: rgba(250, 21, 21, 0.15);
+  color: #fa1515;
+  border-color: rgba(250, 21, 21, 0.4);
+}
