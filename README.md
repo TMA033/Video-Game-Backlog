@@ -16,11 +16,12 @@ A full-stack web application built with **React 19**, **Vite**, **Express 5**, a
   * Horizontal mouse-wheel thumbnail scrolling and auto-centering on the active asset.
   * Fullscreen lightbox modal with keyboard/button arrow navigation.
 * **Live Release Countdown:** Client-side interval counter calculating days, hours, minutes, and seconds until unreleased titles launch.
+* **LocalStorage / database persistence for user library and backlog tracking.
+* **Multi-shelf Sorting (Playing, Completed, Not Started).
 
 ### In Active Development (Roadmap)
-* [ ] LocalStorage / database persistence for user library and backlog tracking.
 * [ ] Platform and genre dropdown filtering on catalog views.
-* [ ] User authentication and multi-shelf sorting (Playing, Completed, Dropped).
+* [ ] User authentication.
 * [ ] User reviews and community ratings.
 
 ---
