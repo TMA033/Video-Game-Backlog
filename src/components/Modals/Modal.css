@@ -1,0 +1,37 @@
+.universal-modal {
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+
+  background-color: #121212;
+  color: white;
+
+  z-index: 1000;           /* Ensures it sits on top of other content */
+  margin: auto;
+}
+
+
+.universal-modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.universal-modal-content {
+  padding: 24px;
+  position: relative;
+}
+
+.universal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+
+  outline: none;
+}

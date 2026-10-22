@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "../../components/Header";
 import { BacklogColumn } from "./BacklogColumn";
 import { RecommendedGames } from "./RecommendedGames";
+import RandomGameModal from './RandomGameModal.jsx';
 import "./Library.css";
 
 const STATUS_COLUMNS = [
@@ -21,6 +22,8 @@ export function Library() {
 
   const [draggingGameId, setDraggingGameId] = useState(null);
   const [activeDropZone, setActiveDropZone] = useState(null);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("users_game_library", JSON.stringify(library));
@@ -70,15 +73,24 @@ export function Library() {
     setLibrary((prevLibrary) => prevLibrary.filter((game) => game.id !== gameId));
   };
 
+  
+
   const handleClearShelf = (statusKey) => {
-    setLibrary((prevLibrary) => {
+    setLibrary((prevLibrary) => 
       prevLibrary.filter((game) => {
-        const gameStatus = game.status || "Not Started";
+        const gameStatus = game.status || 'Not Started';
         return gameStatus !== statusKey;
       })
-    })
+    );
   }
 
+  const onCloseModal = () => {
+    setIsOpen(false);
+  }
+
+  const notStartedCount = library.filter((game) => !game.status || game.status === "Not Started").length;
+  const canRandomize = notStartedCount > 1;
+  
   return (
     <>
       <Header />
@@ -86,7 +98,24 @@ export function Library() {
       <main className="main-content">
         <header className="content-header">
           <h1>Your Library</h1>
+          <div className="helper-container">
+            <div>Need Help Choosing A Game?</div>
+            <div className="action-buttons">
+              <button
+                type="button" className="dice-btn" disabled={!canRandomize} onClick={() => setIsOpen(true)} aria-label="Pick a random game from your backlog"
+                title={
+                  canRandomize
+                    ? "Pick a random game"
+                    : "Need at least 2 unstarted games to roll"
+                }
+              >
+                <img className="dice-image" src="src/assets/dice.png" alt="" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
         </header>
+
+        <RandomGameModal isOpen={isOpen} onClose={onCloseModal} backlogGames={library}/>
 
         {/* 1. Backlog Shelves */}
         <section className="backlog-main-content">

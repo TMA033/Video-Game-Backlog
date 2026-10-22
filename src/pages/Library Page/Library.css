@@ -9,6 +9,9 @@
 
 .content-header {
   margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .content-header h1 {
@@ -198,4 +201,51 @@
   background: rgba(250, 21, 21, 0.15);
   color: #fa1515;
   border-color: rgba(250, 21, 21, 0.4);
+}
+
+
+.helper-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px
+}
+
+.dice-image {
+  width: 25px;
+  color: white;
+  filter: invert(100%);
+}
+
+.dice-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+
+.dice-btn:hover:not(:disabled) {
+  transform: scale(1.08);
+}
+
+.dice-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.dice-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  filter: grayscale(100%);
 }
