@@ -3,6 +3,31 @@
 A full-stack web application built with **React 19**, **Vite**, **Express 5**, and **CSS3** that enables users to browse, search, and manage a personalized video game backlog using live metadata from the **Internet Game Database (IGDB) API**.
 
 ---
+### Images
+
+<p align="center">
+  <a href="public/screenshots/Main-Homepage.png">
+    <img src="public/screenshots/Main-Homepage.png" width="800" alt="Game Tracker Homepage">
+  </a>
+</p>
+
+<p align="center">
+  <a href="public/screenshots/Game-Details-Page.png">
+    <img src="public/screenshots/Game-Details-Page.png" width="800" alt="Game Tracker Game Details Page">
+  </a>
+</p>
+
+<p align="center">
+  <a href="public/screenshots/Library-Page.png">
+    <img src="public/screenshots/Library-Page.png" width="800" alt="Game Tracker Library Page">
+  </a>
+</p>
+
+<p align="center">
+  <a href="public/screenshots/Random-Game-Selector.png">
+    <img src="public/screenshots/Random-Game-Selector.png" width="800" alt="Game Tracker Random Game Selector">
+  </a>
+</p>
 
 ## Features
 
@@ -30,7 +55,7 @@ A full-stack web application built with **React 19**, **Vite**, **Express 5**, a
 * **Dynamic Validation:** Prevents duplicate rolls and ensures a sufficient number of unstarted games are present before rolling.
 
 ### Gaming Industry Events (`/events`)
-* **Event Aggregation:** Backend query routing parsing gaming conventions, showcases, and livestreams directly from IGDB's `/events` endpoint.
+* **Event Discovery:** Fetches gaming conventions, showcases, and livestreams from IGDB's `/events` endpoint through the Express backend.
 
 ---
 
@@ -59,7 +84,7 @@ Express Proxy Server (:5000)
 Twitch / IGDB API (v4)
 ```
 
-Direct client browser calls to IGDB are blocked by CORS policies and leak client credentials. The Express proxy server (`server.js`) secures API secrets, handles OAuth token caching and renewal on `401 Unauthorized` responses, and formats data before delivery to the frontend.
+The Express proxy server (server.js) handles communication with IGDB, keeping Twitch API credentials on the server rather than exposing them to the browser. It manages OAuth access tokens, retries requests when a token is rejected with a 401 Unauthorized response, and formats API responses for the frontend.
 
 ---
 

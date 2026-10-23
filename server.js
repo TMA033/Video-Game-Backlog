@@ -230,7 +230,6 @@ function formatGameDetails(rawGame) {
 
 app.get('/api/events', async (req, res) => {
   try {
-    const currentUnix = Math.floor(Date.now() / 1000);
 
     const query = `
       fields
