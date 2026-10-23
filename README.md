@@ -127,6 +127,7 @@ Direct client browser calls to IGDB are blocked by CORS policies and leak client
 ## Getting Started
 
 ### Prerequisites
+
 * [Node.js](https://nodejs.org/) (v18 or higher recommended)
 * A [Twitch Developer Portal](https://dev.twitch.tv/console) account with a registered application (`Client ID` and `Client Secret`)
 
@@ -152,19 +153,14 @@ Direct client browser calls to IGDB are blocked by CORS policies and leak client
    ```
 
 4. **Run the Application:**
-   Open two terminal windows:
+   Start both the Express backend and the Vite frontend simultaneously with a single command:
+   ```bash
+   npm run dev:full
+   ```
+   * *Backend server runs on `http://localhost:5000`*
+   * *Frontend client runs on `http://localhost:5173`*
 
-   * **Terminal 1 (Backend Server):**
-     ```bash
-     node server.js
-     ```
-     *(Runs on `http://localhost:5000`)*
-
-   * **Terminal 2 (Frontend Dev Server):**
-     ```bash
-     npm run dev
-     ```
-     *(Runs on `http://localhost:5173`)*
+   *(Optional: You can also run them individually in separate terminals using `npm run start:server` and `npm run dev`)*
 
 5. Open your browser and navigate to `http://localhost:5173`.
 
