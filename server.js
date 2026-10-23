@@ -2,12 +2,14 @@ import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
 import 'dotenv/config';
+import process from 'node:process';
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(express.text()); // Handles IGDB query strings
+
 
 let accessToken = '';
 
@@ -259,7 +261,7 @@ app.get('/api/events', async (req, res) => {
 });
 
 
-app.get('/api/evets/:id', async(req, res) => {
+app.get('/api/events/:id', async(req, res) => {
   try {
     const { id } = req.params;
 
