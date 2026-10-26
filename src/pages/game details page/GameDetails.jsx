@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from "react-router-dom";
-import { useLibrary } from '../../hooks/useLibrary';
+import { useLibraryContext } from "../../hooks/LibraryContext";
 import { Header } from '../../components/Header';
 import { ReleaseCountdown } from './ReleaseCountdown';
 import leftArrow from '../../assets/left-arrow-svgrepo-com.svg';
@@ -13,7 +13,7 @@ export function GameDetails() {
   const [loading, setLoading] = useState(true);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0); // This is the index of the currently focused media
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const { isInBacklogCheck, toggleBacklog } = useLibrary();
+  const { library, toggleBacklog, isInBacklogCheck } = useLibraryContext();
 
 
   const inBacklog = Boolean(game && isInBacklogCheck(game.id));

@@ -115,7 +115,7 @@ The Express proxy server (server.js) handles communication with IGDB, keeping Tw
 │   │       ├── Modal.jsx        # HTML5 dialog wrapper
 │   │       └── Modal.css
 │   ├── hooks/
-│   │   └── useLibrary.jsx       # Centralized backlog state and localStorage sync
+│   │   └── LibraryContext.jsx       # Centralized backlog state and localStorage sync
 │   ├── pages/
 │   │   ├── home/
 │   │   │   ├── HomePage.jsx     # Discover & catalog container

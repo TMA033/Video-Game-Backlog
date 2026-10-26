@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Header } from "../../components/Header";
 import { BacklogColumn } from "./BacklogColumn";
+import { useLibraryContext } from "../../hooks/LibraryContext";
 import { RecommendedGames } from "./RecommendedGames";
 import RandomGameModal from './RandomGameModal.jsx';
 import "./Library.css";
@@ -12,13 +13,7 @@ const STATUS_COLUMNS = [
 ];
 
 export function Library() {
-  const [library, setLibrary] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("users_game_library")) || [];
-    } catch {
-      return [];
-    }
-  });
+  const { library, setLibrary } = useLibraryContext();
 
   const [draggingGameId, setDraggingGameId] = useState(null);
   const [activeDropZone, setActiveDropZone] = useState(null);

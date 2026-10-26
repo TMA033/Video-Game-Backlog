@@ -1,8 +1,8 @@
 import { GameCard } from "./GameCard";
-import { useLibrary } from "../../hooks/useLibrary";
+import { useLibraryContext } from "../../hooks/LibraryContext";
 
 export function GameGrid( {games} ) {
-  const { toggleBacklog, isInBacklogCheck } = useLibrary();
+  const { toggleBacklog, isInBacklogCheck } = useLibraryContext();
 
   return (
     <div className="game-grid">
