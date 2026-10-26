@@ -124,10 +124,12 @@ export function GameDetails() {
         <div className="showcase-container">
           <div className="media-gallery">
             <div className="spotlight-frame">
-              <div className='gallery-controls'>
-                <img src={leftArrow} className='arrow-keys' onClick={() => setActiveMediaIndex((prev) => (prev > 0 ? prev - 1 : mediaItems.length - 1))}/>
-                <img src={rightArrow} className='arrow-keys' onClick={() => setActiveMediaIndex((prev) => (prev < mediaItems.length - 1 ? prev + 1 : 0))} />
+              {mediaItems.length > 0 && (
+                <div className='gallery-controls'>
+                  <img src={leftArrow} className='arrow-keys' onClick={() => setActiveMediaIndex((prev) => (prev > 0 ? prev - 1 : mediaItems.length - 1))}/>
+                  <img src={rightArrow} className='arrow-keys' onClick={() => setActiveMediaIndex((prev) => (prev < mediaItems.length - 1 ? prev + 1 : 0))} />
               </div>
+              )}
 
               {activeMedia?.type === 'video' ? (
                 <iframe 
@@ -139,7 +141,11 @@ export function GameDetails() {
                 <img
                   src={activeMedia?.src || game.coverUrl}
                   className="spotlight-media spotlight-media-image"
-                  onClick={() => setIsFullscreen(true)}
+                  onClick={() => {
+                    if (mediaItems.length > 0) {
+                      setIsFullscreen(true);
+                    }
+                  }}
                 />
               )}
             </div>
@@ -231,11 +237,13 @@ export function GameDetails() {
         <div className='fullscreen-media-container' onClick={() => setIsFullscreen(false)}>
           <button type="button" className='close-button' onClick={() => setIsFullscreen(false)}>x</button>
           <div className='fullscreen-wrapper' onClick={(e) => e.stopPropagation()}>
-            <div className='gallery-controls-fullscreen'>
-                <img src={leftArrow} className='arrow-keys-fullscreen' onClick={() => setActiveMediaIndex((prev) => (prev > 0 ? prev - 1 : mediaItems.length - 1))}/>
+            {mediaItems.length > 0 && (
+              <div className='gallery-controls-fullscreen'>
+                <img src={leftArrow} className='arrow-keys-fullscreen' onClick={() => setActiveMediaIndex((prev) => (prev > 0 ? prev - 1 : mediaItems.length - 1))} />
                 <img src={rightArrow} className='arrow-keys-fullscreen' onClick={() => setActiveMediaIndex((prev) => (prev < mediaItems.length - 1 ? prev + 1 : 0))} />
               </div>
-            {activeMedia.type === 'video' ? (
+            )}
+            {activeMedia?.type === 'video' ? (
               <iframe src={activeMedia.src} className="fullscreen-video" allowFullScreen/>
             ) : 
               <img src={activeMedia?.src || game.coverUrl} className='fullscreen-image'/>

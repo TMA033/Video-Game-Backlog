@@ -29,15 +29,15 @@ export default function RandomGameModal({isOpen, onClose, backlogGames}) {
       <div className='game-picker-container'>
         <div className='modal-title'>
           <h1>Random Game Selector</h1>
-          <p className='header-info-text'>(Select's games from your "Not Started" category)</p>
+          <p className='header-info-text'>(Selects games from your "Not Started" category)</p>
         </div>
 
         {selectedGame ? 
           <div className='chosen-game'>
-            <img className='selected-game-image' src={selectedGame ? selectedGame.image : null}></img>
+            <img className='selected-game-image' src={selectedGame.image}></img>
             <p className='selected-game-title'>{selectedGame.title}</p>
             <p className='selected-game-release-date'>{selectedGame.release}</p>
-            <p className='selected-game-hltb'>how long to beat here</p>
+            <p className='selected-game-hltb'> </p> {/* HLTB HERE*/}
           </div>
         : 
           <div>
@@ -45,7 +45,7 @@ export default function RandomGameModal({isOpen, onClose, backlogGames}) {
           </div>
         }
 
-        <button className='randomize-game-btn' disabled={!canRandomize} onClick={() => getRandomGame(backlogGames)}>
+        <button className='randomize-game-btn' disabled={!canRandomize} onClick={() => getRandomGame()}>
           {canRandomize ? 'Randomize Game' : 'Add 1 More Game To Randomize'}
         </button>
       </div>
