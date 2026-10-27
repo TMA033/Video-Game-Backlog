@@ -29,8 +29,8 @@ export function EventsPage() {
     }
 
     fetchEventDetails();
-    
-  }, [events]);
+
+  }, []);
 
   if (loading) return <div>Loading Events...</div>
   if (error) return <div>Failed to load events: {error}</div>

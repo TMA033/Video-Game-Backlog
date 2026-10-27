@@ -37,7 +37,7 @@ export function GameDetails() {
         setGame(null);
         setError(null);
 
-        const res =  await fetch(`${import.meta.env.VITE_API_URL}/${slug}`, {signal: controller.signal});
+        const res =  await fetch(`${import.meta.env.VITE_API_URL}/api/games/${slug}`, {signal: controller.signal});
 
         if (res.status === 400) {
           setError('Invalid Game URL');
