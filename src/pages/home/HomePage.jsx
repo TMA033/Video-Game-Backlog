@@ -18,7 +18,9 @@ export function HomePage() {
       try {
         console.log(search);
 
-        const endpoint = search ? `http://localhost:5000/api/games/search?q=${encodeURIComponent(search)}` : `http://localhost:5000/api/games/popular`;
+        const endpoint = search 
+          ? `${import.meta.env.VITE_API_URL}/api/games/search?q=${encodeURIComponent(search)}` 
+          : `${import.meta.env.VITE_API_URL}/api/games/popular`;
 
         const response = await fetch(endpoint);
         const rawData = await response.json();

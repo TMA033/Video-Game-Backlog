@@ -11,6 +11,7 @@ import './GameDetails.css';
 export function GameDetails() {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0); // This is the index of the currently focused media
   const [isFullscreen, setIsFullscreen] = useState(false);
   const { library, toggleBacklog, isInBacklogCheck } = useLibraryContext();
@@ -27,30 +28,59 @@ export function GameDetails() {
 
 
   useEffect(() => {
+    const controller = new AbortController();
+    let cancelled = false;
+
     async function fetchGameDetails() {
       try {
         setLoading(true);
+        setGame(null);
+        setError(null);
 
-        const res =  await fetch(`http://localhost:5000/api/games/${slug}`);
+        const res =  await fetch(`${import.meta.env.VITE_API_URL}/${slug}`, {signal: controller.signal});
+
+        if (res.status === 400) {
+          setError('Invalid Game URL');
+          return
+        }
+
+        if (res.status === 404) {
+          setError('Game Not Found');
+          return
+        }
 
         if (!res.ok) {
           throw new Error(`Error: ${res.status} ${res.statusText}`);
         }
 
         const data = await res.json();
-        setGame(data);
+        if (!cancelled) {
+          setGame(data);
+        }
         
 
       } catch (err) {
+        if (err.name === 'AbortError' || cancelled) {
+          return;
+        }
+        
         console.error('Failed to load game:', err);
+        setError('Unable to load game details. Please try again.');
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
     if (slug) {
       fetchGameDetails();
     }
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
 
   }, [slug]);
 
@@ -105,6 +135,7 @@ export function GameDetails() {
   const activeMedia = mediaItems[activeMediaIndex];
 
   if (loading) return <div>Loading game details...</div>;
+  if (error) return <div>{error}</div>
   if (!game) return <div>Game Not Found</div>
 
 

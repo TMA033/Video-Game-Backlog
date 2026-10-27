@@ -39,10 +39,9 @@ export function Header() {
 
 
       <div className="middle-section">
-        {/* Well insert the number of games with the API*/}
         <div className="search-bar-container">
           <img src={SearchIcon} className="search-icon" />
-          <input type="search" className ="search-input" placeholder="Search games" onChange={updateSearchInput} onKeyDown={handleKeyDown}/>
+          <input type="search" className ="search-input" placeholder="Search games" onChange={updateSearchInput} onKeyDown={handleKeyDown} maxLength={100}/>
         </div>
       </div>
 
@@ -57,7 +56,7 @@ export function Header() {
             Notifications
           </button>
 
-          {/* Rendering the modal conditionally / style modal later */}
+          {/* Rendering the modal conditionally / style modal ltr */}
 
           {isNotificationsOpen && (
             <div className='notification-modal'>

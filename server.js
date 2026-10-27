@@ -13,15 +13,31 @@ app.use(express.text()); // Handles IGDB query strings
 
 let accessToken = '';
 
+
+function logApiError(context, error) {
+  console.error(`${context}:`, {
+    message: error.message,
+    code: error.code,
+    status: error.response?.status,
+    response: error.response?.data,
+    cause: error.cause?.message,
+  })
+}
+
+
 // Helper function to fetch an OAuth token from Twitch
 async function getTwitchToken() {
   try {
-    const response = await axios.post('https://id.twitch.tv/oauth2/token', null, {
-      params: {
-        client_id: process.env.TWITCH_CLIENT_ID,
-        client_secret: process.env.TWITCH_CLIENT_SECRET,
-        grant_type: 'client_credentials',
-      },
+    const response = await axios.post(
+      'https://id.twitch.tv/oauth2/token', 
+      null, 
+      {
+        timeout: 10000,
+        params: {
+          client_id: process.env.TWITCH_CLIENT_ID,
+          client_secret: process.env.TWITCH_CLIENT_SECRET,
+          grant_type: 'client_credentials',
+        },
     });
 
     accessToken = response.data.access_token;
@@ -29,35 +45,52 @@ async function getTwitchToken() {
     return true;
   } catch (error) {
     console.error('Error fetching Twitch token:', error.response?.data || error.message);
-    return false;
+    throw error;
   }
 }
 
 
 async function igdbRequest(endpoint, query) {
   if (!accessToken) {
-    const ok = await getTwitchToken();
-    if (!ok) throw new Error('Twitch authentication failed');
+    try {
+      await getTwitchToken();
+    } catch (error) {
+      throw new Error('Twitch authentication failed', {
+        cause: error,
+      });
+    }
   }
 
-  const makeReq = () =>
-    axios.post(`https://api.igdb.com/v4/${endpoint}`, query, {
+
+  const makeReq = () => {
+    return axios.post(`https://api.igdb.com/v4/${endpoint}`, query, {
+      timeout: 10000,
       headers: {
         'Client-ID': process.env.TWITCH_CLIENT_ID,
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'text/plain',
       },
-    });
+    })
+  };
+
 
   try {
     const res = await makeReq();
     return res.data;
   } catch (err) {
     if (err.response?.status === 401) {
-      await getTwitchToken();
+      try {
+        await getTwitchToken();
+      } catch (error) {
+        throw new Error('Failed to refresh Twitch access token', {
+          cause: error,
+        });
+      }
+
       const retryRes = await makeReq();
       return retryRes.data;
     }
+
     throw err;
   }
 }
@@ -85,7 +118,7 @@ app.get('/api/games/popular', async (req, res) => {
 
     res.json(cleanGames);
   } catch (error) {
-    console.error('Popular Games Error:', error.response?.data || error.message);
+    logApiError('Popular Games Error', error);
     res.status(500).json({ error: 'Failed to fetch popular games' });
   }
 });
@@ -96,12 +129,31 @@ app.get('/api/games/search', async (req, res) => {
   try {
     const searchTerm = req.query.q;
 
-    if (!searchTerm) {
-      return res.status(400).json({ error: 'Search query is required' });
+    if (typeof searchTerm !== 'string' || !searchTerm.trim()) {
+      return res.status(400).json({
+        error: 'Search query is required'
+      })
     }
 
+    const trimmedSearchTerm = searchTerm.trim();
+
+
+    if(trimmedSearchTerm.length > 100) {
+      return res.status(400).json({
+        error: 'Search query must be 100 characters or fewer'
+      })
+    }
+
+    if (/["\\]/.test(trimmedSearchTerm)) {
+      return res.status(400).json({
+        error: 'Search query contains unsupported characters',
+      });
+    }
+
+    
+
     const query = `
-      search "${searchTerm}";
+      search "${trimmedSearchTerm}";
       fields checksum, name, slug, rating, cover.url, first_release_date, themes, age_ratings.rating_category, version_parent;
       where game_type = (0, 8, 9, 4, 10) & version_parent = null;
       limit 40;
@@ -118,7 +170,7 @@ app.get('/api/games/search', async (req, res) => {
 
     res.json(cleanGames);
   } catch (error) {
-    console.error('Search Games Error', error.response?.data || error.message);
+    logApiError('Search Games Error', error);
     res.status(500).json({ error: 'Failed to search games' });
   }
 });
@@ -127,6 +179,13 @@ app.get('/api/games/search', async (req, res) => {
 app.get('/api/games/:slug', async (req, res) => {
   try {
     const { slug } = req.params;
+
+    if (!/^[a-z0-9-]+$/.test(slug)) {
+      return res.status(400).json({
+        error: 'Invalid game slug',
+      });
+    }
+
 
     const query = `
       fields 
@@ -169,7 +228,7 @@ app.get('/api/games/:slug', async (req, res) => {
 
     res.json(formatedGames);
   } catch (error) {
-    console.error('Single Game Error:', error.response?.data || error.message);
+    logApiError('Game Details Error', error);
     res.status(500).json({ error: 'Failed to fetch game details' });
   }
 })
@@ -254,7 +313,7 @@ app.get('/api/events', async (req, res) => {
     const formattedEvents = events.map((event) => formatEvent(event));
     res.json(formattedEvents);
   } catch (error) {
-    console.error('Events Error:', error.response?.data || error.message);
+    logApiError('Events Error', error);
     res.status(500).json({error: 'Failed to fetch events'});
   }
 });
@@ -263,6 +322,12 @@ app.get('/api/events', async (req, res) => {
 app.get('/api/events/:id', async(req, res) => {
   try {
     const { id } = req.params;
+
+    if (!/^\d+$/.test(id) || !Number.isSafeInteger(Number(id)) || Number(id) <= 0) {
+      return res.status(400).json({
+        error: 'Invalid event ID',
+      });
+    }
 
     const query = `
       fields 
@@ -288,7 +353,7 @@ app.get('/api/events/:id', async(req, res) => {
 
     res.json(formatEvent(events[0]));
   } catch (error) {
-    console.error('Single Event Error:', error.response?.data || error.message);
+    logApiError('Event Details Error', error);
     res.status(500).json({error: 'Failed to fetch event details'});
   }
 });

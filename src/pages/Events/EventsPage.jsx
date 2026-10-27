@@ -11,7 +11,7 @@ export function EventsPage() {
       try {
         setIsLoading(true);
 
-        const res = await fetch('http://localhost:5000/api/events');
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/events`);
 
         if (!res.ok) {
           throw new Error(`Error: ${res.status} ${res.statusText}`);
@@ -29,7 +29,8 @@ export function EventsPage() {
     }
 
     fetchEventDetails();
-  }, []);
+    
+  }, [events]);
 
   if (loading) return <div>Loading Events...</div>
   if (error) return <div>Failed to load events: {error}</div>
